@@ -142,28 +142,9 @@
         <div class="main-menu-content">
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
 
-                <li class="nav-item has-sub  " style="">
-                    <a class="d-flex align-items-center" href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-pie-chart">
-                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
-                            <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
-                        </svg>
-                        <span class="menu-title text-truncate" data-i18n="Charts">@lang('cars')</span></a>
-                    <ul class="menu-content">
+                @include('layouts.admin.sidebar')
 
-                        <li class="nav-item ">
-                            <a class="d-flex align-items-center" href="">
-                                <i data-feather="file-text"></i><span
-                                    class="menu-title text-truncate">@lang('Transmission')</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
-
-                <li class="nav-item has-sub  " style="">
+                {{-- <li class="nav-item has-sub  " style="">
                     <a class="d-flex align-items-center" href="#">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -210,7 +191,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
 
             </ul>
         </div>
@@ -263,7 +244,8 @@
     {{-- <script src="{{asset('dashboard/app-assets/js/scripts/tables/table-datatables-basic.min.js')}}"></script> --}}
     <script src="{{ asset('dashboard/app-assets/js/scripts/extensions/ext-component-toastr.min.js') }}"></script>
     <!-- END: Page JS-->
-
+<!-- Option 1: Include in HTML -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
     <script>
         $(window).on('load', function() {
@@ -304,7 +286,7 @@
         });
 
 
-        $('.add-mode-form').on('submit', function(event) {
+        $('.Submit_System').on('submit', function(event) {
             $('.search_input').val("").trigger("change")
             event.preventDefault();
             var data = new FormData(this);
@@ -323,8 +305,8 @@
 
                 beforeSend: function() {},
                 success: function(result) {
-                    $('#full-modal-stem').modal('hide');
-                    $('#add_model_form').trigger("reset");
+                    $('#modal_System').modal('hide');
+                    $('#Submit_Form').trigger("reset");
                     toastr.success('@lang('done_successfully')', '', {
                         rtl: isRtl
                     });
@@ -353,6 +335,10 @@
             });
         });
 
+        function deleteModal() {
+            $('form').trigger("reset");
+            $('form').attr('action', '');
+        }
 
         $(document).on("click", ".btn_delete", function(e) {
             var button = $(this)
@@ -482,6 +468,57 @@
                 },
             });
         });
+
+
+        function SubmitForm() {
+            $('.add-mode-form').on('submit', function(event) {
+                $('.search_input').val("").trigger("change")
+                event.preventDefault();
+                var data = new FormData(this);
+                let url = $(this).attr('action');
+                var method = $(this).attr('method');
+                $('input').removeClass('is-invalid');
+                $('select').removeClass('is-invalid');
+                $('.invalid-feedback').text('');
+                $.ajax({
+                    type: method,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    url: url,
+                    data: data,
+                    beforeSend: function() {},
+                    success: function(result) {
+                        $('#full-modal-stem').modal('hide');
+                        $('#add_model_form').trigger("reset");
+                        toastr.success('@lang('done_successfully')', '', {
+                            rtl: isRtl
+                        });
+                        table.draw()
+                    },
+                    error: function(data) {
+                        if (data.status === 422) {
+                            var response = data.responseJSON;
+                            $.each(response.errors, function(key, value) {
+                                toastr.error(value);
+                                var str = (key.split("."));
+                                if (str[1] === '0') {
+                                    key = str[0] + '[]';
+                                }
+                                $('[name="' + key + '"], [name="' + key + '[]"]').addClass(
+                                    'is-invalid');
+                                $('[name="' + key + '"], [name="' + key + '[]"]').closest(
+                                    '.form-group').find('.invalid-feedback').html(value[0]);
+                            });
+                        } else {
+                            toastr.error('@lang('something_wrong')', '', {
+                                rtl: isRtl
+                            });
+                        }
+                    }
+                });
+            });
+        }
     </script>
 
 </body>

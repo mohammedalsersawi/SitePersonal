@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Models\Image;
+use App\Models\Uplode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -27,7 +28,15 @@ function locales()
     }
     return $arr;
 }
-
+function sendResponse($result = null, $msg = '')
+{
+    $response = [
+        'success' => 200,
+        'data' => $result,
+        'message' => $msg,
+    ];
+    return response()->json($response, 200);
+}
 function languages()
 {
     if (app()->getLocale() == 'en') {
@@ -36,40 +45,44 @@ function languages()
         return ['ar' => 'العربية', 'en' => 'النجليزية'];
     }
 }
-function UploadImage($file, $path = null, $model, $imageable_id, $update = false, $id = null, $type)
+function Uploads($file, $path = null, $file_type, $relation_id, $update = false, $id = null)
 {
-
-    $imagename = uniqid() . '.' . $file->getClientOriginalExtension();
-    $file->move(public_path('uploads/' . $path), $imagename);
+    $full_name = uniqid() . '.' . $file->getClientOriginalExtension();
+    $public_path = 'uploads/' . $path . '/' . $full_name;
+    $file->move(public_path('uploads/' . $path), $full_name);
     if (!$update) {
-        Image::create([
-            'filename' =>  $imagename,
-            'imageable_id' => $imageable_id,
-            'imageable_type' => $model,
-            'type' => $type
+        Uplode::create([
+            'name' =>  $file->getClientOriginalName(),
+            'filename' =>  $full_name,
+            'full_large_path' =>  $public_path,
+            'full_original_path' => $public_path,
+            'relation_id' => $relation_id,
+            'path' => $path,
+            'file_type' => $file_type,
         ]);
     } else {
-
-        $image = Image::where('imageable_id', $imageable_id)->where('imageable_type', $model)->first();
-        if ($id) {
-            $image = Image::where('id', $id)->first();
-        }
-        if ($image) {
-            File::delete(public_path('uploads/' . @$path . @$image->filename));
-            $image->update(
-                [
-                    'filename' => $imagename,
-                    'imageable_id' => $imageable_id,
-                    'imageable_type' => $model,
-                    'type' => $type
-                ]
-            );
+        $dataFile = Uplode::where('relation_id', $relation_id)->where('file_type', $file_type)->first();
+        if ($dataFile) {
+            File::delete(public_path($dataFile->full_large_path));
+            $dataFile->update([
+                'name' => $file->getClientOriginalName(),
+                'filename' => $full_name,
+                'full_large_path' => $public_path,
+                'full_original_path' => $public_path,
+                'relation_id' => $relation_id,
+                'path' => $path,
+                'file_type' => $file_type,
+            ]);
         } else {
-            Image::create([
-                'filename' =>  $imagename,
-                'imageable_id' => $imageable_id,
-                'imageable_type' => $model,
-                'type' => $type
+            // إنشاء سجل جديد
+            Uplode::create([
+                'name' => $file->getClientOriginalName(),
+                'filename' => $full_name,
+                'full_large_path' => $public_path,
+                'full_original_path' => $public_path,
+                'relation_id' => $relation_id,
+                'path' => $path,
+                'file_type' => $file_type,
             ]);
         }
     }
