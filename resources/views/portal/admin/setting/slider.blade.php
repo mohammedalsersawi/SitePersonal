@@ -321,7 +321,7 @@
         $(function() {
             $("#aks-file-upload").aksFileUpload({
                 fileUpload: "#slider_cover", // With target [input]file or [type]json you can save the data of loaded items
-                fileType: ["pdf", "docx", "rtf", "jpg", "jpeg", "png"], // allowed file formats
+                fileType: ["svg", "jpg", "jpeg", "png"], // allowed file formats
                 dragDrop: true, // drag & drop upload
                 maxSize: "90 GB", // maximum uploaded file size
                 multiple: false, // multiple file upload

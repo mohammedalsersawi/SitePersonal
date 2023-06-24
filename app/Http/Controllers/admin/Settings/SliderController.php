@@ -17,6 +17,7 @@ class SliderController extends Controller
 
     public function store(SliderRequest $request)
     {
+        // dd($request);
         $data = [];
         foreach (locales() as $key => $language) {
             $data['info'][$key] = $request->get('info_' . $key);

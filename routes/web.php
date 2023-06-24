@@ -6,15 +6,16 @@ use App\Http\Controllers\site\MainController;
 use App\Http\Controllers\admin\FactController;
 use App\Http\Controllers\admin\MailController;
 use App\Http\Controllers\Admin\AboutController;
-use App\Http\Controllers\admin\category\CategorControllery;
-use App\Http\Controllers\admin\pages\feature\FeatureController;
 use App\Http\Controllers\admin\SkillsController;
 use App\Http\Controllers\admin\SocialController;
 use App\Http\Controllers\admin\ServiceController;
 use App\Http\Controllers\admin\Settings\MenuController;
 use App\Http\Controllers\admin\Settings\MeunController;
 use App\Http\Controllers\admin\Settings\SliderController;
+use App\Http\Controllers\admin\pages\blogs\BlogController;
+use App\Http\Controllers\admin\category\CategorControllery;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\admin\pages\feature\FeatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +132,14 @@ Route::group(
                 Route::get('/getData', 'getData')->name('getData');
             });
             Route::controller(FeatureController::class)->prefix('feature')->name('feature.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::put('/activate/{id}', 'activate')->name('activate');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::delete('/{uuid}', 'destroy')->name('delete');
+                Route::get('/getData', 'getData')->name('getData');
+            });
+            Route::controller(BlogController::class)->prefix('blog')->name('blog.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::put('/activate/{id}', 'activate')->name('activate');
                 Route::post('/store', 'store')->name('store');

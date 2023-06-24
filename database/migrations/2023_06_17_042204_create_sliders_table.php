@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('info');
             $table->string('video_text')->nullable();
             $table->string('video_url')->nullable();
-            $table->string('button_text')->nullable();
-            $table->string('url');
+            $table->string('button')->nullable();
+            $table->string('url')->nullable();
             $table->integer('status')->default(1);
             $table->integer('order')->nullable();
             $table->bigInteger('created_by')->nullable();

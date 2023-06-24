@@ -39,10 +39,10 @@ function sendResponse($result = null, $msg = '')
 }
 function languages()
 {
-    if (app()->getLocale() == 'en') {
-        return ['ar' => 'arabic', 'en' => 'english'];
+    if (app()->getLocale() == 'de') {
+        return ['ar' => 'arabic', 'de' => 'German'];
     } else {
-        return ['ar' => 'العربية', 'en' => 'النجليزية'];
+        return ['ar' => 'العربية', 'de' => 'الالمانية'];
     }
 }
 function Uploads($file, $path = null, $file_type, $relation_id, $update = false, $id = null)

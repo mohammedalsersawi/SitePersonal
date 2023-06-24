@@ -15,6 +15,7 @@ class MainController extends Controller
 {
     public function index()
     {
+
         $data_about = About::first();
          $my_name = About::with('image')->select('id','name')->first();
         $data_fact = Fact::where('status', 1)->take(4)->get();
