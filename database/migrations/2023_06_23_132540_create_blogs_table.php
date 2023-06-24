@@ -21,7 +21,7 @@ return new class extends Migration
             $table->bigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('status')->default(1);
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

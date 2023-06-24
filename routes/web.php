@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\pages\blogs\BlogController;
 use App\Http\Controllers\admin\category\CategorControllery;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use App\Http\Controllers\admin\pages\feature\FeatureController;
+use App\Http\Controllers\admin\pages\gallery\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,6 +141,14 @@ Route::group(
                 Route::get('/getData', 'getData')->name('getData');
             });
             Route::controller(BlogController::class)->prefix('blog')->name('blog.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::put('/activate/{id}', 'activate')->name('activate');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::delete('/{uuid}', 'destroy')->name('delete');
+                Route::get('/getData', 'getData')->name('getData');
+            });
+            Route::controller(GalleryController::class)->prefix('gallery')->name('gallery.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::put('/activate/{id}', 'activate')->name('activate');
                 Route::post('/store', 'store')->name('store');
